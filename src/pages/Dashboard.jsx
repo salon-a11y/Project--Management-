@@ -1,111 +1,408 @@
-import { Plus } from 'lucide-react'
-import { useState } from 'react'
-import { useUser } from "@clerk/clerk-react"
+import { Plus, Sparkles } from "lucide-react";
+import { useState } from "react";
+import { useUser } from "@clerk/clerk-react";
 
-import StatsGrid from '../components/StatsGrid'
-import ProjectOverview from '../components/ProjectOverview'
-import RecentActivity from '../components/RecentActivity'
-import TasksSummary from '../components/TasksSummary'
-import CreateProjectDialog from '../components/CreateProjectDialog'
+import StatsGrid from "../components/StatsGrid";
+import ProjectOverview from "../components/ProjectOverview";
+import RecentActivity from "../components/RecentActivity";
+import TasksSummary from "../components/TasksSummary";
+import CreateProjectDialog from "../components/CreateProjectDialog";
+
 
 const Dashboard = () => {
 
-    const { user, isLoaded } = useUser()
-    const [isDialogOpen, setIsDialogOpen] = useState(false)
 
-    if (!isLoaded) return null  // wait for Clerk to load
+    const { user, isLoaded } = useUser();
+
+    const [isDialogOpen,setIsDialogOpen] = useState(false);
+
+
+
+    if(!isLoaded) return null;
+
+
 
     const displayName =
         user?.fullName ||
         user?.firstName ||
         user?.primaryEmailAddress?.emailAddress?.split("@")[0] ||
-        "User"
+        "User";
+
+
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-zinc-950 dark:via-zinc-900 dark:to-zinc-950">
-            
-            <div className="max-w-7xl mx-auto px-6 py-10">
 
-                {/* Header */}
-                <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-8 mb-14">
 
-                    <div className="space-y-2">
-                        <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-indigo-600 to-blue-500 bg-clip-text text-transparent">
-                            Welcome back, {displayName}
-                        </h1>
+    <div
+    className="
+    min-h-screen
 
-                        <p className="text-gray-500 dark:text-zinc-400 text-sm sm:text-base">
-                            Here's what's happening with your projects today
-                        </p>
-                    </div>
+    bg-gradient-to-br
+    from-slate-100
+    via-white
+    to-blue-100
 
-                    <button
-                        onClick={() => setIsDialogOpen(true)}
-                        className="flex items-center gap-2 px-6 py-3 rounded-2xl 
-                        bg-gradient-to-r from-indigo-500 to-purple-600 
-                        text-white font-medium shadow-lg 
-                        hover:shadow-indigo-500/30 
-                        hover:-translate-y-0.5 
-                        transition-all duration-300"
-                    >
-                        <Plus size={16} />
-                        New Project
-                    </button>
+    dark:from-zinc-950
+    dark:via-zinc-900
+    dark:to-black
 
-                    <CreateProjectDialog
-                        isDialogOpen={isDialogOpen}
-                        setIsDialogOpen={setIsDialogOpen}
-                    />
-                </div>
+    "
+    >
 
-                {/* Stats Section */}
-                <div className="mb-14 p-6 rounded-3xl 
-                bg-white/70 dark:bg-zinc-900/60 
-                backdrop-blur-xl 
-                border border-gray-200 dark:border-zinc-800 
-                shadow-sm">
-                    <StatsGrid />
-                </div>
 
-                {/* Main Content */}
-                <div className="grid lg:grid-cols-3 gap-10">
+        <div
+        className="
+        max-w-7xl
+        mx-auto
+        px-6
+        py-10
+        "
+        >
 
-                    <div className="lg:col-span-2 space-y-10">
 
-                        <div className="rounded-3xl 
-                        bg-white dark:bg-zinc-900 
-                        border border-gray-200 dark:border-zinc-800 
-                        shadow-md hover:shadow-xl 
-                        transition-all duration-300 
-                        p-8">
-                            <ProjectOverview />
-                        </div>
 
-                        <div className="rounded-3xl 
-                        bg-white dark:bg-zinc-900 
-                        border border-gray-200 dark:border-zinc-800 
-                        shadow-md hover:shadow-xl 
-                        transition-all duration-300 
-                        p-8">
-                            <RecentActivity />
-                        </div>
+        {/* Header */}
 
-                    </div>
 
-                    <div className="rounded-3xl 
-                    bg-white dark:bg-zinc-900 
-                    border border-gray-200 dark:border-zinc-800 
-                    shadow-md hover:shadow-xl 
-                    transition-all duration-300 
-                    p-8">
-                        <TasksSummary />
-                    </div>
+        <div
+        className="
+        relative
+        overflow-hidden
 
-                </div>
+        rounded-3xl
+
+        p-8
+        mb-10
+
+        bg-white/70
+        dark:bg-zinc-900/70
+
+        backdrop-blur-xl
+
+        border
+        border-zinc-200
+        dark:border-zinc-800
+
+        shadow-lg
+        "
+        >
+
+
+
+        <div
+        className="
+        absolute
+        w-60
+        h-60
+        bg-blue-500/20
+        rounded-full
+        blur-3xl
+        -top-20
+        -right-20
+        "
+        />
+
+
+
+        <div
+        className="
+        relative
+        flex
+        flex-col
+        lg:flex-row
+        justify-between
+        gap-6
+        "
+        >
+
+
+
+            <div>
+
+
+            <div
+            className="
+            flex
+            items-center
+            gap-2
+            text-blue-500
+            mb-3
+            "
+            >
+
+                <Sparkles size={18}/>
+
+                <span
+                className="text-sm"
+                >
+                    Workspace Dashboard
+                </span>
+
 
             </div>
+
+
+
+            <h1
+            className="
+            text-4xl
+            font-bold
+
+            bg-gradient-to-r
+            from-blue-600
+            to-purple-600
+
+            bg-clip-text
+            text-transparent
+            "
+            >
+
+                Welcome back, {displayName}
+
+            </h1>
+
+
+
+            <p
+            className="
+            mt-3
+            text-zinc-500
+            dark:text-zinc-400
+            "
+            >
+
+                Manage projects, tasks and your team from one place
+
+            </p>
+
+
+            </div>
+
+
+
+
+
+            <button
+
+            onClick={()=>setIsDialogOpen(true)}
+
+            className="
+            h-fit
+
+            flex
+            items-center
+            gap-2
+
+            px-6
+            py-3
+
+            rounded-2xl
+
+            bg-gradient-to-r
+            from-blue-500
+            to-indigo-600
+
+            text-white
+
+            font-medium
+
+            shadow-lg
+            shadow-blue-500/30
+
+            hover:-translate-y-1
+
+            transition-all
+            "
+
+            >
+
+                <Plus size={18}/>
+
+                New Project
+
+            </button>
+
+
+
         </div>
+
+
+
+        <CreateProjectDialog
+        isDialogOpen={isDialogOpen}
+        setIsDialogOpen={setIsDialogOpen}
+        />
+
+
+
+        </div>
+
+
+
+
+
+
+
+        {/* Stats */}
+
+
+        <div
+        className="
+        mb-10
+
+        rounded-3xl
+
+        p-6
+
+        bg-white/60
+        dark:bg-zinc-900/60
+
+        backdrop-blur-xl
+
+        border
+        border-zinc-200
+        dark:border-zinc-800
+
+        shadow-md
+        "
+        >
+
+            <StatsGrid />
+
+        </div>
+
+
+
+
+
+
+
+        {/* Content */}
+
+
+
+        <div
+        className="
+        grid
+        lg:grid-cols-3
+        gap-8
+        "
+        >
+
+
+
+            <div
+            className="
+            lg:col-span-2
+            space-y-8
+            "
+            >
+
+
+
+                <section
+                className="
+                rounded-3xl
+                p-6
+
+                bg-white
+                dark:bg-zinc-900
+
+                border
+                border-zinc-200
+                dark:border-zinc-800
+
+                shadow-md
+
+                hover:shadow-xl
+                transition
+                "
+                >
+
+                    <ProjectOverview/>
+
+                </section>
+
+
+
+
+
+                <section
+                className="
+                rounded-3xl
+                p-6
+
+                bg-white
+                dark:bg-zinc-900
+
+                border
+                border-zinc-200
+                dark:border-zinc-800
+
+                shadow-md
+
+                hover:shadow-xl
+
+                transition
+                "
+                >
+
+                    <RecentActivity/>
+
+                </section>
+
+
+
+            </div>
+
+
+
+
+
+            <section
+
+            className="
+            rounded-3xl
+
+            p-6
+
+            bg-white
+            dark:bg-zinc-900
+
+            border
+            border-zinc-200
+            dark:border-zinc-800
+
+            shadow-md
+
+            hover:shadow-xl
+
+            transition
+            "
+
+            >
+
+                <TasksSummary/>
+
+
+            </section>
+
+
+
+
+        </div>
+
+
+
+        </div>
+
+
+    </div>
+
+
     )
+
 }
 
-export default Dashboard
+
+export default Dashboard;

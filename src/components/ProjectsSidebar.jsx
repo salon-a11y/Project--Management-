@@ -1,77 +1,302 @@
-import { useState } from 'react';
-import { Link, useLocation, useSearchParams } from 'react-router-dom';
-import { ChevronRightIcon, SettingsIcon, KanbanIcon, ChartColumnIcon, CalendarIcon, ArrowRightIcon } from 'lucide-react';
-import { useSelector } from 'react-redux';
+import { useState } from "react";
+import { Link, useLocation, useSearchParams } from "react-router-dom";
+
+import {
+    ChevronRightIcon,
+    SettingsIcon,
+    KanbanIcon,
+    ChartColumnIcon,
+    CalendarIcon,
+    ArrowRightIcon
+} from "lucide-react";
+
+import { useSelector } from "react-redux";
+
 
 const ProjectSidebar = () => {
 
     const location = useLocation();
 
     const [expandedProjects, setExpandedProjects] = useState(new Set());
+
     const [searchParams] = useSearchParams();
 
+
     const projects = useSelector(
-        (state) => state?.workspace?.currentWorkspace?.projects || []
+        (state) =>
+            state?.workspace?.currentWorkspace?.projects || []
     );
 
+
+
     const getProjectSubItems = (projectId) => [
-        { title: 'Tasks', icon: KanbanIcon, url: `/projectsDetail?id=${projectId}&tab=tasks` },
-        { title: 'Analytics', icon: ChartColumnIcon, url: `/projectsDetail?id=${projectId}&tab=analytics` },
-        { title: 'Calendar', icon: CalendarIcon, url: `/projectsDetail?id=${projectId}&tab=calendar` },
-        { title: 'Settings', icon: SettingsIcon, url: `/projectsDetail?id=${projectId}&tab=settings` }
+        {
+            title: "Tasks",
+            icon: KanbanIcon,
+            url: `/projectsDetail?id=${projectId}&tab=tasks`
+        },
+        {
+            title: "Analytics",
+            icon: ChartColumnIcon,
+            url: `/projectsDetail?id=${projectId}&tab=analytics`
+        },
+        {
+            title: "Calendar",
+            icon: CalendarIcon,
+            url: `/projectsDetail?id=${projectId}&tab=calendar`
+        },
+        {
+            title: "Settings",
+            icon: SettingsIcon,
+            url: `/projectsDetail?id=${projectId}&tab=settings`
+        }
     ];
 
+
+
     const toggleProject = (id) => {
+
         const newSet = new Set(expandedProjects);
-        newSet.has(id) ? newSet.delete(id) : newSet.add(id);
+
+        if (newSet.has(id)) {
+            newSet.delete(id);
+        } else {
+            newSet.add(id);
+        }
+
         setExpandedProjects(newSet);
     };
 
+
+
     return (
-        <div className="mt-6 px-3">
-            <div className="flex items-center justify-between px-3 py-2">
-                <h3 className="text-xs font-medium text-gray-500 dark:text-zinc-400 uppercase tracking-wider">
+
+        <div className="mt-6 px-3 w-full">
+
+
+            {/* Header */}
+
+            <div className="
+            flex items-center justify-between 
+            px-3 mb-4
+            ">
+
+
+                <h3 className="
+                text-xs uppercase tracking-widest
+                font-semibold text-zinc-400
+                ">
                     Projects
                 </h3>
+
+
+
                 <Link to="/projects">
-                    <button className="size-5 text-gray-500 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-zinc-800 rounded flex items-center justify-center transition-colors duration-200">
-                        <ArrowRightIcon className="size-3" />
+
+                    <button
+                        className="
+                        p-2 rounded-xl
+                        bg-zinc-800
+                        hover:bg-blue-500/20
+                        transition
+                        "
+                    >
+
+                        <ArrowRightIcon
+                            size={14}
+                            className="text-blue-400"
+                        />
+
                     </button>
+
                 </Link>
+
+
             </div>
 
-            <div className="space-y-1 px-3">
+
+
+
+
+            <div className="space-y-2">
+
+
                 {projects.map((project) => (
-                    <div key={project.id}>
-                        <button onClick={() => toggleProject(project.id)} className="w-full flex items-center gap-2 px-3 py-2 rounded-lg transition-colors duration-200 text-gray-700 dark:text-zinc-300 hover:bg-gray-100 dark:hover:bg-zinc-800 hover:text-gray-900 dark:hover:text-white" >
-                            <ChevronRightIcon className={`size-3 text-gray-500 dark:text-zinc-400 transition-transform duration-200 ${expandedProjects.has(project.id) && 'rotate-90'}`} />
-                            <div className="size-2 rounded-full bg-blue-500" />
-                            <span className="truncate max-w-40 text-sm">{project.name}</span>
+
+
+                    <div
+                        key={project.id}
+                        className="rounded-xl overflow-hidden"
+                    >
+
+
+
+
+                        {/* Project */}
+
+                        <button
+
+                            onClick={() => toggleProject(project.id)}
+
+                            className="
+                            w-full flex items-center gap-3
+                            px-4 py-3 rounded-xl
+
+                            bg-zinc-900/70
+                            border border-zinc-800
+
+                            text-zinc-300
+
+                            hover:border-blue-500
+                            hover:bg-zinc-800
+
+                            transition
+                            "
+
+                        >
+
+
+                            <ChevronRightIcon
+
+                                size={15}
+
+                                className={`
+                                text-zinc-400 transition-transform
+                                ${
+                                    expandedProjects.has(project.id)
+                                    ? "rotate-90"
+                                    : ""
+                                }
+                                `}
+                            />
+
+
+
+                            <div
+                                className="
+                                w-2.5 h-2.5 rounded-full
+                                bg-gradient-to-r
+                                from-blue-500 to-indigo-600
+                                "
+                            />
+
+
+
+                            <span className="
+                            text-sm truncate
+                            ">
+                                {project.name}
+                            </span>
+
+
+
                         </button>
 
-                        {expandedProjects.has(project.id) && (
-                            <div className="ml-5 mt-1 space-y-1">
-                                {getProjectSubItems(project.id).map((subItem) => {
-                                    // checking if the current path matches the sub-item's URL
-                                    const isActive =
-                                        location.pathname === `/projectsDetail` &&
-                                        searchParams.get('id') === project.id &&
-                                        searchParams.get('tab') === subItem.title.toLowerCase();
 
-                                    return (
-                                        <Link key={subItem.title} to={subItem.url} className={`flex items-center gap-3 px-3 py-1.5 rounded-lg transition-colors duration-200 text-xs ${isActive ? 'bg-blue-100 text-blue-600 hover:bg-blue-200 dark:bg-blue-500/10 dark:text-blue-400 dark:hover:bg-blue-500/20' : 'text-gray-600 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-zinc-800'}`} >
-                                            <subItem.icon className="size-3" />
-                                            {subItem.title}
-                                        </Link>
-                                    );
-                                })}
-                            </div>
-                        )}
+
+
+
+
+
+                        {/* Sub Menu */}
+
+                        {
+                            expandedProjects.has(project.id) && (
+
+                                <div
+                                    className="
+                                    ml-5 mt-2 space-y-1
+                                    border-l border-zinc-700
+                                    pl-3
+                                    "
+                                >
+
+
+                                    {
+                                        getProjectSubItems(project.id)
+                                        .map((item)=>{
+
+
+                                            const Icon = item.icon;
+
+
+                                            const active =
+                                            location.pathname === "/projectsDetail"
+                                            &&
+                                            searchParams.get("id") === project.id
+                                            &&
+                                            searchParams.get("tab") === item.title.toLowerCase();
+
+
+
+                                            return (
+
+                                                <Link
+
+                                                    key={item.title}
+
+                                                    to={item.url}
+
+
+                                                    className={`
+                                                    flex items-center gap-3
+                                                    px-3 py-2 rounded-lg
+                                                    text-xs transition
+
+                                                    ${
+                                                    active
+
+                                                    ?
+
+                                                    "bg-gradient-to-r from-blue-500/20 to-indigo-500/20 text-blue-400 border border-blue-500/30"
+
+                                                    :
+
+                                                    "text-zinc-400 hover:text-white hover:bg-zinc-800"
+                                                    }
+                                                    `}
+
+                                                >
+
+
+                                                    <Icon size={14}/>
+
+
+                                                    {item.title}
+
+
+                                                </Link>
+
+                                            )
+
+                                        })
+                                    }
+
+
+
+                                </div>
+
+                            )
+                        }
+
+
+
                     </div>
+
+
                 ))}
+
+
+
             </div>
+
+
+
         </div>
+
     );
+
 };
+
 
 export default ProjectSidebar;
